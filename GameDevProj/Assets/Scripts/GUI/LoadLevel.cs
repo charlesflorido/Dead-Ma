@@ -18,6 +18,7 @@ public class LoadLevel : MonoBehaviour {
     {
         float fadeTime = scene.BeginFade(1);
         yield return new WaitForSeconds(fadeTime);
+        Cursor.visible = true;
         Application.LoadLevel(level);
     }
 }

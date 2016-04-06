@@ -4,6 +4,7 @@ using System.Collections;
 public class Explosion : MonoBehaviour {
 
     public AudioClip audioExplode;
+    public float damage;
 	
     void ExplosionSound()
     {

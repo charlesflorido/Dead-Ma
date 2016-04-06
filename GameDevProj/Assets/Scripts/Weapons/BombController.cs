@@ -16,6 +16,7 @@ public class BombController : Weapon
     public override void Fire()
     {
         AudioSource.PlayClipAtPoint(setAlarm, this.transform.position);
+        UserManager.instance.CommitSuicide();
     }
 
     public override void FireEnd()

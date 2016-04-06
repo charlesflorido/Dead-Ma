@@ -4,6 +4,7 @@ using UnityEngine.UI;
 
 public class PlayerController : BaseClass {
 
+    private float health = 500.0f;
 
     public Weapon[] weapons;
     private int currentWeapon;
@@ -12,7 +13,7 @@ public class PlayerController : BaseClass {
     public float moveSpeed = 2.0f;
 
     public PlayerSpriteController sprite;
-    public Text ammoText;
+    public RandomSounds painSounds;
 
     private bool isMoving;
 
@@ -20,7 +21,7 @@ public class PlayerController : BaseClass {
         currentWeapon = 0;
         previousWeapon = 0;
         weapons[0].gameObject.SetActive(true);
-        ammoText.text = weapons[currentWeapon].GetAmmoLeft();
+        UserManager.instance.ammoManager.ammo.text = weapons[currentWeapon].GetAmmoLeft();
     }
 	
 
@@ -209,7 +210,7 @@ public class PlayerController : BaseClass {
             weapons[n].Load();
             previousWeapon = currentWeapon;
             currentWeapon = n;
-            ammoText.text = weapons[currentWeapon].GetAmmoLeft();
+            UserManager.instance.ammoManager.ammo.text = weapons[currentWeapon].GetAmmoLeft();
         }
     }
 
@@ -232,8 +233,25 @@ public class PlayerController : BaseClass {
             weapons[currentWeapon].FireEnd();
         }
 
-        ammoText.text = weapons[currentWeapon].GetAmmoLeft();
+        UserManager.instance.ammoManager.ammo.text = weapons[currentWeapon].GetAmmoLeft();
     }
 
+
+    void OnTriggerEnter2D(Collider2D coll)
+    {
+        if(coll.gameObject.tag == "strike")
+        {
+            health -= coll.gameObject.GetComponent<DeadlyProjectile>().damage;
+            UserManager.instance.healthManager.UpdateHealthManager(health);
+            painSounds.PlayRandomClip(this.transform);
+        }
+
+        if (coll.gameObject.tag == "deadly")
+        {
+            health -= coll.gameObject.GetComponent<Spit>().damage;
+            UserManager.instance.healthManager.UpdateHealthManager(health);
+            painSounds.PlayRandomClip(this.transform);
+        }
+    }
     
 }
